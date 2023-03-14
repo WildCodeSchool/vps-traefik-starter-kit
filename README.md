@@ -7,6 +7,7 @@ Must be installed on the VPS before anything else
 - Docker
 - Docker Compose
 - Git
+- htpasswd utility from apache2-utils
 
 See [Prerequisites](PREREQUISITES.md) page for more information.
 
@@ -15,7 +16,7 @@ See [Prerequisites](PREREQUISITES.md) page for more information.
 First, clone this repository in a `traefik` directory and `cd` in it.
 
 ```bash
-git clone https://github.com/Wildcodeschool/vps-traefik-starter-kit traefik
+git clone https://github.com/WildCodeSchool/vps-traefik-starter-kit.git traefik
 cd traefik
 ```
 
@@ -23,7 +24,7 @@ The file `install.sh` is ready to configure and start Traefik automatically.
 Simply run the following by replacing with your values.
 
 ```bash
-sh install.sh \
+bash install.sh \
 EMAIL=your_valid_email@example.com \
 HOST=your_domain.dev \
 USER_NAME=admin \ 

@@ -3,8 +3,8 @@ helpFunction()
    echo "Usage: sh $0 EMAIL=some_email@example.com HOST=your_domain.dev"
    echo "\tEMAIL a valid email needed to generate letsencrypt certificate"
    echo "\tHOST indicate the main domain pointing to your VPS IP"
-   echo "\USER_NAME indicate the user name for traefik dashboard (optional - default admin)"
-   echo "\USER_PASS indicate the user password for traefik dashboard (optional - default password)"
+   echo "\tUSER_NAME indicate the user name for traefik dashboard (optional - default admin)"
+   echo "\tUSER_PASS indicate the user password for traefik dashboard (optional - default password)"
    exit 1 # Exit script after printing help
 }
 
@@ -35,6 +35,8 @@ sed -i -e "s/credentials/$CREDENTIALS/g" ./data/configurations/dynamic.yml
 rm ./data/configurations/dynamic.yml-e
 
 touch ./data/acme.json
+
+docker network create proxy
 
 docker compose down
 HOST_DOMAIN=$HOST docker compose up -d

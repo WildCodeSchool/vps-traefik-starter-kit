@@ -1,13 +1,21 @@
 <!-- TOC -->
 * [Prerequisites](#prerequisites)
+  * [Keep packages updated before install](#keep-packages-updated-before-install)
   * [Install Docker](#install-docker)
   * [Install Docker Compose manually](#install-docker-compose-manually)
   * [Update chmod](#update-chmod)
   * [Install Git](#install-git)
+  * [Install htpasswd part of apache2-utils](#install-htpasswd-part-of-apache2-utils)
   * [Check that everything is ok](#check-that-everything-is-ok)
 <!-- TOC -->
 
 # Prerequisites
+
+## Keep packages updated before install
+
+```bash
+sudo apt update && sudo apt upgrade
+```
 
 ## Install Docker
 
@@ -38,6 +46,12 @@ sudo chmod 666 /var/run/docker.sock
 sudo apt install git
 ```
 
+## Install htpasswd part of apache2-utils
+
+```bash
+sudo apt install apache2-utils
+```
+
 ## Check that everything is ok
 
 ```bash
@@ -49,4 +63,7 @@ docker compose version
 
 git --version
 # git version 2.34.1
+
+htpasswd --help
+# Usage: description
 ```
