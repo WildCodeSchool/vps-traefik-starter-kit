@@ -27,12 +27,17 @@ fi
 
 cp ./data/traefik.dist.yml ./data/traefik.yml
 sed -i -e "s/replaceWithYourMail/$EMAIL/g" ./data/traefik.yml
-rm ./data/traefik.yml-e
+if test -f ./data/traefik.yml; then
+  rm ./data/traefik.yml-e
+fi
 
 CREDENTIALS=$(htpasswd -nbBC 10 ${USER_NAME:-admin} ${USER_PASS:-password} | sed 's/\//\\\//g')
 cp ./data/configurations/dynamic.dist.yml ./data/configurations/dynamic.yml
 sed -i -e "s/credentials/$CREDENTIALS/g" ./data/configurations/dynamic.yml
-rm ./data/configurations/dynamic.yml-e
+if test -f ./data/configurations/dynamic.yml-e; then
+  rm ./data/configurations/dynamic.yml-e
+fi
+
 
 touch ./data/acme.json
 

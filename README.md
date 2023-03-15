@@ -27,8 +27,8 @@ Simply run the following by replacing with your values.
 bash install.sh \
 EMAIL=your_valid_email@example.com \
 HOST=your_domain.dev \
-USER_NAME=admin \ 
-USER_PASS=password 
+USER_NAME=admin \
+USER_PASS=password
 ```
 
 | Var       | Mandatory | Default  | Description                                                                                             |
