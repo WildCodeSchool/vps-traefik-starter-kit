@@ -16,7 +16,8 @@ http:
     user-auth:
       basicAuth:
         users:
-          # replace word credentials below with bcrypt pair username:password_hashed
+          # user_name:user_password
+          # replace word below with bcrypt pair username:password_hashed
           - "credentials"
 
 tls:

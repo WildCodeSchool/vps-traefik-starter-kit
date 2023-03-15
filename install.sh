@@ -34,6 +34,8 @@ fi
 CREDENTIALS=$(htpasswd -nbBC 10 ${USER_NAME:-admin} ${USER_PASS:-password} | sed 's/\//\\\//g')
 cp ./data/configurations/dynamic.dist.yml ./data/configurations/dynamic.yml
 sed -i -e "s/credentials/$CREDENTIALS/g" ./data/configurations/dynamic.yml
+sed -i -e "s/user_name/${USER_NAME:-admin}/g" ./data/configurations/dynamic.yml
+sed -i -e "s/user_password/${USER_PASS:-password}/g" ./data/configurations/dynamic.yml
 if test -f ./data/configurations/dynamic.yml-e; then
   rm ./data/configurations/dynamic.yml-e
 fi

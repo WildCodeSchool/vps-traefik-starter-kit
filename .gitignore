@@ -1,6 +1,7 @@
 .idea
 .vscode
 .DS_Store
+.env
 /data/traefik.yml
 /data/acme.json
 /data/configurations/dynamic.yml

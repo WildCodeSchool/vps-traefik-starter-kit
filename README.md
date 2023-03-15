@@ -44,19 +44,11 @@ your_domain.dev replaced by your domain).
 
 ## Mount a Mysql database with Phpmyadmin
 
-Move to database directory
+Move to database directory, create `.env` file from `.env.sample`, edit values and save.
 ```bash
 cd database
-```
-
-Configure and start database container.
-```bash
-PROJECT_NAME=database \
-HOST=your_domain.dev \
-MYSQL_USER=user \
-MYSQL_PASSWORD=password \
-MYSQL_ROOT_PASSWORD=rootpassword \
-docker compose up -d
+cp .env.sample .env
+nano .env
 ```
 
 | Var                 | Mandatory |   Default    | Description                                                                                                                                |
@@ -66,6 +58,11 @@ docker compose up -d
 | MYSQL_USER          |    No     |     user     | Main user created when docker build the image and granted with all privileges. Can access to database from external container on port 3306 |
 | MYSQL_PASSWORD      |    No     |   password   | Main user password                                                                                                                         |
 | MYSQL_ROOT_PASSWORD |    No     | rootpassword | Root password needed when connect to mysql from internal service container. <br/>Connection with root is disabled from external.           |
+
+Start container.
+```bash
+docker compose up -d
+```
 
 When done, PhpMyadmin is reachable at something like https://pma.database.your_domain.dev where `database` depends on
 the value of PROJECT_NAME and `your_domain.dev` on the value of HOST.
