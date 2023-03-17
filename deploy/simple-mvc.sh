@@ -10,4 +10,4 @@ fi
 cd "../../projects/${1}"
 git pull origin main
 
-PROJECT_NAME=${2} docker compose --env-file ./data/.env up -d --build --remove-orphans --force-recreate
+PROJECT_NAME=${2} docker compose --env-file ../../traefik/data/.env up -d --build --remove-orphans --force-recreate
