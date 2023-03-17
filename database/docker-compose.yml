@@ -3,18 +3,16 @@ version: '3.4'
 services:
   database:
     image: mysql/mysql-server:8.0
-    container_name: ${PROJECT_NAME:-database}-db
+    container_name: ${DATABASE_SUBDOMAIN_NAME:-database}-db
     restart: always
     volumes:
       - ./setup.sh:/docker-entrypoint-initdb.d/setup.sh
       - db-data:/var/lib/mysql
-    env_file:
-      - .env
     environment:
       # So you don't have to use root, but you can if you like
-      MYSQL_USER: ${MYSQL_USER:-user}
+      MYSQL_USER: ${USER_NAME:-user}
       # You can use whatever password you like
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-password}
+      MYSQL_PASSWORD: ${USER_PASSWORD:-password}
       # Password for root access
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpassword}
     networks:
@@ -25,22 +23,22 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
-      - "traefik.http.routers.${PROJECT_NAME:-database}-secure.entrypoints=mysql"
-      - "traefik.http.routers.${PROJECT_NAME:-database}-secure.rule=Host(`${PROJECT_NAME:-database}.${HOST:-localhost}`)"
+      - "traefik.http.routers.${DATABASE_SUBDOMAIN_NAME:-database}-secure.entrypoints=mysql"
+      - "traefik.http.routers.${DATABASE_SUBDOMAIN_NAME:-database}-secure.rule=Host(`${DATABASE_SUBDOMAIN_NAME:-database}.${HOST:-localhost}`)"
 
   phpmyadmin:
     image: phpmyadmin
-    container_name: ${PROJECT_NAME:-database}-pma
+    container_name: ${DATABASE_SUBDOMAIN_NAME:-database}-pma
     restart: always
     networks:
       - proxy
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
-      - "traefik.http.routers.pma-${PROJECT_NAME:-database}-secure.entrypoints=websecure"
-      - "traefik.http.routers.pma-${PROJECT_NAME:-database}-secure.rule=Host(`pma.${PROJECT_NAME:-database}.${HOST:-localhost}`)"
+      - "traefik.http.routers.pma-${DATABASE_SUBDOMAIN_NAME:-database}-secure.entrypoints=websecure"
+      - "traefik.http.routers.pma-${DATABASE_SUBDOMAIN_NAME:-database}-secure.rule=Host(`pma.${DATABASE_SUBDOMAIN_NAME:-database}.${HOST:-localhost}`)"
     environment:
-      PMA_HOST: ${PROJECT_NAME:-database}-db
+      PMA_HOST: ${DATABASE_SUBDOMAIN_NAME:-database}-db
 
 networks:
   proxy:
@@ -48,4 +46,4 @@ networks:
 
 volumes:
   db-data:
-    name: ${PROJECT_NAME:-database}-db
+    name: ${DATABASE_SUBDOMAIN_NAME:-database}-db

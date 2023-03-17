@@ -9,9 +9,5 @@ fi
 
 cd "../../projects/${1}"
 git pull origin main
-ENV_FILE=./.env
-if test -f "$ENV_FILE"; then
-    docker compose up -d --build --remove-orphans --force-recreate
-else
-    echo "file $ENV_FILE not found!"
-fi
+
+PROJECT_NAME=${2} docker compose --env-file ./data/.env up -d --build --remove-orphans --force-recreate

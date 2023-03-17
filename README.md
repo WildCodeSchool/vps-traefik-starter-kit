@@ -1,3 +1,13 @@
+<!-- TOC -->
+
+* [Traefik starter kit for VPS](#traefik-starter-kit-for-vps)
+    * [Prerequisites](#prerequisites)
+    * [Step1 - Configure and start Traefik](#step1---configure-and-start-traefik)
+    * [Step2 - Mount a Mysql database with Phpmyadmin](#step2---mount-a-mysql-database-with-phpmyadmin)
+    * [Deploy your projects](#deploy-your-projects)
+
+<!-- TOC -->
+
 # Traefik starter kit for VPS
 
 ## Prerequisites
@@ -11,7 +21,7 @@ Must be installed on the VPS before anything else
 
 See [Prerequisites](PREREQUISITES.md) page for more information.
 
-## Configure and start Traefik
+## Step1 - Configure and start Traefik
 
 First, clone this repository in a `traefik` directory and `cd` in it.
 
@@ -21,56 +31,47 @@ cd traefik
 ```
 
 The file `install.sh` is ready to configure and start Traefik automatically.
-Simply run the following by replacing with your values.
+Create `.env` file from `.env.sample` ind `/data` directory, edit values and save.
 
 ```bash
-bash install.sh \
-EMAIL=your_valid_email@example.com \
-HOST=your_domain.dev \
-USER_NAME=admin \
-USER_PASS=password
+cp ./data/.env.sample ./data/.env
+nano ./data/.env
 ```
 
-| Var       | Mandatory | Default  | Description                                                                                             |
-|-----------|:---------:|----------|:--------------------------------------------------------------------------------------------------------|
-| EMAIL     |    yes    |          | Used to generate letsencrypt certificate. <br/> Write a valid email so you will receive renew reminders |
-| HOST      |    yes    |          | Your main domain pointing to the VPS. You can note __localhost__ when running Docker in local.          |
-| USER_NAME |    no     | admin    | User login to Traefik dashboard                                                                         |
-| USER_PASS |    no     | password | User password to log in Traefik dashboard                                                               |
+| Var                     | Description                                                                                                                                                                            |
+|-------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| HOST                    | Your main domain pointing to the VPS. You can write __localhost__ when running Docker in local.                                                                                        |
+| LETS_ENCRYPT_EMAIL      | Used to generate letsencrypt certificate. <br/> Write a valid email so you will receive renew reminders.                                                                               |
+| USER_NAME               | User login to Traefik dashboard. Will also be used to create a user with all privileges when installing the database. <br/>Can access to database from external container on port 3306 |
+| USER_PASSWORD           | User password to log in Traefik dashboard. Will be used for main user database too.                                                                                                    |
+| DATABASE_SUBDOMAIN_NAME | Name given to the container and used to create docker volume `database-db`, container `database-db` and subdomain.                                                                     |
+| MYSQL_ROOT_PASSWORD     | Root password needed when connect to mysql from internal service container. <br/>Connection with root is disabled from external.                                                       |
 
-Once this is done, Traefik is ready to process proxy requests.  
-The Traefik dashboard is accessible at https://traefik.your_domain.dev with the credentials you provided (
-your_domain.dev replaced by your domain).
-
-## Mount a Mysql database with Phpmyadmin
-
-Move to database directory, create `.env` file from `.env.sample`, edit values and save.
+Once this is done, simply run the script.
 ```bash
-cd database
-cp .env.sample .env
-nano .env
+bash install.sh
 ```
 
-| Var                 | Mandatory |   Default    | Description                                                                                                                                |
-|---------------------|:---------:|:------------:|--------------------------------------------------------------------------------------------------------------------------------------------|
-| PROJECT_NAME        |    No     |   database   | Name given to the container and used to create docker volume `database-db`, container `database-db` and subdomain.                         |
-| HOST                |    Yes    |              | Your main domain pointing to the VPS. You can note __localhost__ when running Docker in local.                                             |
-| MYSQL_USER          |    No     |     user     | Main user created when docker build the image and granted with all privileges. Can access to database from external container on port 3306 |
-| MYSQL_PASSWORD      |    No     |   password   | Main user password                                                                                                                         |
-| MYSQL_ROOT_PASSWORD |    No     | rootpassword | Root password needed when connect to mysql from internal service container. <br/>Connection with root is disabled from external.           |
+Traefik is then ready to process proxy requests.  
+The Traefik dashboard is accessible at https://traefik.your_domain.dev with the credentials you provided (your_domain.dev replaced by your domain).
 
-Start container.
+## Step2 - Mount a Mysql database with Phpmyadmin
+
+If you have correctly filled in all the fields in the .env file from step 1, just run the following command.
+
 ```bash
-docker compose up -d
+docker compose --env-file ./data/.env -f ./database/docker-compose.yml up -d
 ```
 
 When done, PhpMyadmin is reachable at something like https://pma.database.your_domain.dev where `database` depends on
-the value of PROJECT_NAME and `your_domain.dev` on the value of HOST.
+the value of DATABASE_SUBDOMAIN_NAME and `your_domain.dev` on the value of HOST.
 This database will be persisted thanks to `database-db` volume and reachable from any external container
 with `database-db` container name.  
 Example:
+
 ```dotenv
 DATABASE_URL="mysql://user:password@database-db:3306/my_app?serverVersion=8&charset=utf8mb4"
 ```
 
 ## Deploy your projects
+
