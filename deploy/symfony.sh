@@ -1,5 +1,5 @@
 if [ ! -d "../../projects/ " ]; then
-  mkdir ../projects
+  mkdir "../projects"
 fi
 if [ ! -d "../../projects/${1} " ]; then
   cd "../../projects/"
