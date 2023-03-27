@@ -12,6 +12,7 @@ fi
 
 #Update main branch
 cd "../../projects/${1}"
+git checkout main
 git pull origin main
 
 #Build and start Docker container and their services
