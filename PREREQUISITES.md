@@ -11,6 +11,8 @@
 
 # Prerequisites
 
+>If you have installed Caprover, it is necessary to uninstall it before installing Traefik. More info here [https://caprover.com/docs/troubleshooting.html#how-to-stop-and-remove-captain](https://caprover.com/docs/troubleshooting.html#how-to-stop-and-remove-captain).
+
 ## Keep packages updated before install
 
 ```bash
