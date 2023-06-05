@@ -6,10 +6,11 @@ set +o allexport
 #Set EMAIL for Let's Encrypt
 cp ./data/traefik.dist.yml ./data/traefik.yml
 sed -i -e "s/replaceWithYourMail/$LETS_ENCRYPT_EMAIL/g" ./data/traefik.yml
-if test -f ./data/traefik.yml; then
+if test -f ./data/traefik.yml-e; then
   rm ./data/traefik.yml-e
 fi
 touch ./data/acme.json
+chmod 600 ./data/acme.json
 
 #Set credentials for Traefik dashboard
 CREDENTIALS=$(htpasswd -nbBC 10 ${USER_NAME:-user} ${USER_PASSWORD:-password} | sed 's/\//\\\//g')
