@@ -6,6 +6,7 @@
   * [Update chmod](#update-chmod)
   * [Install Git](#install-git)
   * [Install htpasswd part of apache2-utils](#install-htpasswd-part-of-apache2-utils)
+  * [Instal jq](#instal-jq)
   * [Check that everything is ok](#check-that-everything-is-ok)
 <!-- TOC -->
 
@@ -49,9 +50,16 @@ sudo apt install git
 ```
 
 ## Install htpasswd part of apache2-utils
-
+Used to encrypt Traefik dashboard password access
 ```bash
 sudo apt install apache2-utils
+```
+
+## Install jq
+Used to parse json from github action environment variables to .env files.  
+https://lindevs.com/install-jq-on-ubuntu
+```bash
+sudo apt install -y jq
 ```
 
 ## Check that everything is ok
@@ -68,4 +76,7 @@ git --version
 
 htpasswd --help
 # Usage: description
+
+jq --version
+# jq-1.6
 ```

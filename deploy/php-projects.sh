@@ -18,8 +18,15 @@ cd "../../projects/${1}"
 git checkout main
 git pull origin main
 
+#print Github action vars to project .env file
+VARS=${3}
+if [ ! -d "../envs/ " ]; then
+  mkdir "../envs"
+fi
+echo $VARS | jq 'to_entries[] | "\(.key)=\(.value)"' | sed 's/"//g' > ../envs/.env-${1}
+
 #Build and start Docker container and their services
-PROJECT_NAME=${2} DB_NAME=`echo "${1}" | sed 's/\-/\_/g'` docker compose --env-file ../../traefik/data/.env up -d --build --remove-orphans --force-recreate
+GITHUB_REPOSITORY_NAME=${1} PROJECT_NAME=${2} DB_NAME=`echo "${1}" | sed 's/\-/\_/g'` docker compose --env-file ../../traefik/data/.env up -d --build --remove-orphans --force-recreate
 
 #Restart mailhog containers
 docker container restart $(docker container ls -qa --filter name=mailhog)
