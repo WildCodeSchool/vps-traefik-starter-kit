@@ -17,4 +17,4 @@ sudo rm -rf ./${GITHUB_REPOSITORY_NAME}
 sudo rm ./envs/.env-${GITHUB_REPOSITORY_NAME}
 
 #Drop project databases
-docker exec -i ${DATABASE_SUBDOMAIN_NAME}-db mysql -uroot -p${MYSQL_ROOT_PASSWORD} <<< "DROP DATABASE ${DB_NAME}; DROP DATABASE ${DB_TEST_NAME};"
+docker exec -i ${DATABASE_SUBDOMAIN_NAME}-db mysql -uroot -p${MYSQL_ROOT_PASSWORD} <<< "DROP DATABASE IF EXISTS  ${DB_NAME}; DROP DATABASE IF EXISTS ${DB_TEST_NAME};"
