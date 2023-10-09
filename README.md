@@ -1,12 +1,14 @@
 <!-- TOC -->
+
 * [Traefik starter kit for VPS](#traefik-starter-kit-for-vps)
-  * [Prerequisites](#prerequisites)
-  * [Step1 - Configure and start Traefik](#step1---configure-and-start-traefik)
-  * [Step2 - Mount a Mysql database with Phpmyadmin](#step2---mount-a-mysql-database-with-phpmyadmin)
-  * [Deploy your projects](#deploy-your-projects)
-    * [For Simple-MVC & Symfony starter kits.](#for-simple-mvc--symfony-starter-kits)
-    * [Let's Encrypt SSL certificates explanations](#lets-encrypt-ssl-certificates-explanations)
-  * [Troubleshooting & useful commands](#troubleshooting--useful-commands)
+    * [Prerequisites](#prerequisites)
+    * [Step1 - Configure and start Traefik](#step1---configure-and-start-traefik)
+    * [Step2 - Mount a Mysql database with Phpmyadmin](#step2---mount-a-mysql-database-with-phpmyadmin)
+    * [Deploy your projects](#deploy-your-projects)
+        * [For Simple-MVC & Symfony starter kits.](#for-simple-mvc--symfony-starter-kits)
+        * [Let's Encrypt SSL certificates explanations](#lets-encrypt-ssl-certificates-explanations)
+    * [Troubleshooting & useful commands](#troubleshooting--useful-commands)
+
 <!-- TOC -->
 
 # Traefik starter kit for VPS
@@ -81,57 +83,46 @@ DATABASE_URL="mysql://user:password@database-db:3306/my_app?serverVersion=8&char
 
 ### For Simple-MVC & Symfony starter kits.
 
-The `php-projects.sh` file in the `deploy` directory can be used by Github action to trigger deployment, updates and build of Docker containers automatically.
+The `php-project.sh` file in the `deploy` directory can be used by Github action to trigger deployment, updates and
+build of Docker containers automatically.
 You just have to add on each git repository three following secret variables and an environment variable as shown below.
 
-| Name         |    Type     | Path from git repository    | Description                                                                                                                                                                                                                                                                                                                                      |
-|--------------|:-----------:|-----------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| SSH_HOST     |   secret    | /settings/secrets/actions   | Your VPS IP address                                                                                                                                                                                                                                                                                                                              |
-| SSH_USER     |   secret    | /settings/secrets/actions   | Your ssh user name                                                                                                                                                                                                                                                                                                                               |
-| SSH_PASSWORD |   secret    | /settings/secrets/actions   | Your ssh user password                                                                                                                                                                                                                                                                                                                           |
+| Name         |   Type   | Path from git repository    | Description                                                                                                                                                                                                                                                                                                                                      |
+|--------------|:--------:|-----------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| SSH_HOST     |  secret  | /settings/secrets/actions   | Your VPS IP address                                                                                                                                                                                                                                                                                                                              |
+| SSH_USER     |  secret  | /settings/secrets/actions   | Your ssh user name                                                                                                                                                                                                                                                                                                                               |
+| SSH_PASSWORD |  secret  | /settings/secrets/actions   | Your ssh user password                                                                                                                                                                                                                                                                                                                           |
 | PROJECT_NAME | variable | /settings/variables/actions | The name you want to give to the project. This name will be used to generate the Docker container as well as the subdomain and associated services (e.g. https://project-name.your-domain.wilders.dev, https://mailhog.project-name.your-domain.wilders.dev, etc.). ⚠️ Be careful not to use underscores in the project name but rather hyphens. |
-| APP_ENV | variable | /settings/variables/actions | Deployment environment (dev, test, prod) |
+| APP_ENV      | variable | /settings/variables/actions | [optional]  Deployment environment (dev, test, prod)                                                                                                                                                                                                                                                                                             |
 
-No prior configuration is required. Deployments are based on the Dockerfile and docker-compose.yml files integrated in each project.  
-The projects are automatically cloned in the `~/projects` directory in the root of the user folder. The names of the git repositories used to generate the associated databases. That's all!
-
-
+No prior configuration is required. Deployments are based on the Dockerfile and docker-compose.yml files integrated in
+each project.  
+The projects are automatically cloned in the `~/projects` directory in the root of the user folder. The names of the git
+repositories used to generate the associated databases. That's all!
 
 Github CLI can be very useful to generate very quickly the secret variables from an `.env` file.
 See [https://cli.github.com/manual/gh_secret_set](https://cli.github.com/manual/gh_secret_set) for further
 information.  
-Below is the extract of the github workflow used and integrated in each project too.
 
-```yaml
-name: CD-traefik
+### For JS template projects
+Same configuration as above. `js-project.sh` will be triggered by the Github action workflow.
 
-on:
-  push:
-    branches: [ main ]
+## Let's Encrypt SSL certificates explanations
 
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy to VPS
-        uses: appleboy/ssh-action@master
-        with:
-          username: ${{ secrets.SSH_USER }}
-          host: ${{ secrets.SSH_HOST }}
-          password: ${{ secrets.SSH_PASSWORD }}
-          script: cd && cd traefik/deploy && bash ./php-projects.sh ${{ github.event.repository.name }} ${{ vars.PROJECT_NAME }} '${{ toJSON(vars) }}'
-```
+SSl certificates are generated by [Let's Encrypt](https://letsencrypt.org/) automatically each time a project is
+deployed for the first time and store on the server in the `/traefik/data/acme.json` file. Certificates have
+a [lifetime of 90 days](https://letsencrypt.org/2015/11/09/why-90-days.htm). You will receive renewal notifications by
+e-mail according to this period and for each domain name.
+To regenerate one or more certificates, simply restart Traefik. Run the command below from the `/traefik` folder:
 
-### Let's Encrypt SSL certificates explanations
-
-SSl certificates are generated by [Let's Encrypt](https://letsencrypt.org/) automatically each time a project is deployed for the first time and store on the server in the `/traefik/data/acme.json` file. Certificates have a [lifetime of 90 days](https://letsencrypt.org/2015/11/09/why-90-days.htm). You will receive renewal notifications by e-mail according to this period and for each domain name.
-To regenerate one or more certificates, simply restart Traefik. Run the command below from the `/treafik` folder:
 ```bash
 bash restart.sh
 ```
 
 ## Troubleshooting & useful commands
+
 In the event of a problem, you can consult the real-time logs of each project's Docker images.
+
 ```bash
 cd ~/traefik/deploy && bash logs-project.sh <name-of-the-project-directory>
 #example
@@ -139,11 +130,13 @@ cd ~/traefik/deploy && bash logs-project.sh <name-of-the-project-directory>
 ```
 
 If needed, restart Docker
+
 ```bash
 sudo service docker restart
 ```
 
 Clean stopped containers, dangling images and dangling build cache
+
 ```bash
-docker system prune
+docker system prune -a
 ```
