@@ -82,6 +82,8 @@ DATABASE_URL="mysql://user:password@database-db:3306/my_app?serverVersion=8&char
 
 ## Deploy your projects
 
+Warning: ensure your GitHub repository is public, or the deployment process will fail.
+
 ### For Simple-MVC & Symfony starter kits.
 
 The `php-project.sh` file in the `deploy` directory can be used by Github action to trigger deployment, updates and
