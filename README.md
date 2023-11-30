@@ -49,6 +49,7 @@ nano ./data/.env
 | USER_PASSWORD           | User password to log in Traefik dashboard. Will be used for main user database too.                                                                                                    |
 | DATABASE_SUBDOMAIN_NAME | Name given to the container and used to create docker volume `database-db`, container `database-db` and subdomain.                                                                     |
 | MYSQL_ROOT_PASSWORD     | Root password needed when connect to mysql from internal service container. <br/>Connection with root is disabled from external.                                                       |
+| APP_SECRET              | Secret key needed to produce JWT tokens (**only for the JS template**).                                                                                                                |
 
 Once this is done, simply run the script.
 
@@ -80,6 +81,8 @@ DATABASE_URL="mysql://user:password@database-db:3306/my_app?serverVersion=8&char
 ```
 
 ## Deploy your projects
+
+Warning: ensure your GitHub repository is public, or the deployment process will fail.
 
 ### For Simple-MVC & Symfony starter kits.
 

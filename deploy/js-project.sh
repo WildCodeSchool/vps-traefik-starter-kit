@@ -11,12 +11,12 @@ GITHUB_JSON_VARS=${4}
 DB_NAME=`echo "$GITHUB_REPOSITORY_NAME" | sed 's/\-/\_/g'`
 
 #Create projects directory if not exists
-if [ ! -d "../../projects/ " ]; then
+if [ ! -d "../../projects/" ]; then
   mkdir "../../projects"
 fi
 
 #Clone the repository if not exists
-if [ ! -d "../../projects/$GITHUB_REPOSITORY_NAME " ]; then
+if [ ! -d "../../projects/$GITHUB_REPOSITORY_NAME" ]; then
   cd "../../projects/"
   git clone https://github.com/$GITHUB_ACCOUNT_NAME/$GITHUB_REPOSITORY_NAME
   cd -
@@ -28,7 +28,7 @@ git checkout main
 git pull origin main
 
 #print Github action vars to .env file project
-if [ ! -d "../envs/ " ]; then
+if [ ! -d "../envs/" ]; then
   mkdir "../envs"
 fi
 #parse and write ENV vars for both front and backend
