@@ -4,12 +4,12 @@ docker container stop $(docker container ls -q --filter name=mailhog)
 fi
 
 #Create projects directory if not exists
-if [ ! -d "../../projects/ " ]; then
+if [ ! -d "../../projects/" ]; then
   mkdir "../../projects"
 fi
 
 #Clone the repository if not exists
-if [ ! -d "../../projects/${1} " ]; then
+if [ ! -d "../../projects/${1}" ]; then
   cd "../../projects/"
   git clone https://github.com/WildCodeSchool/${1}
   cd -
@@ -22,7 +22,7 @@ git pull origin main
 
 #print Github action vars to project .env file
 VARS=${3}
-if [ ! -d "../envs/ " ]; then
+if [ ! -d "../envs/" ]; then
   mkdir "../envs"
 fi
 echo $VARS | jq 'to_entries[] | "\(.key)=\(.value)"' | sed 's/"//g' > ../envs/.env-${1}
