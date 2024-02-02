@@ -18,7 +18,7 @@ fi
 #Update main branch
 cd "../../projects/${1}"
 git checkout main
-git pull origin main
+git pull origin main --rebase
 
 #print Github action vars to project .env file
 VARS=${3}

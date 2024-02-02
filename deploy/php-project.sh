@@ -20,7 +20,7 @@ fi
 #Update main branch
 cd "../../projects/$GITHUB_REPOSITORY_NAME"
 git checkout main
-git pull origin main
+git pull origin main --rebase
 
 #print Github action vars to .env file project
 if [ ! -d "../envs/" ]; then

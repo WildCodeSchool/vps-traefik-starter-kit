@@ -23,7 +23,7 @@ fi
 #Update main branch
 cd "../../projects/$GITHUB_REPOSITORY_NAME"
 git checkout main
-git pull origin main
+git pull origin main --rebase
 
 #parse and write ENV vars for both front and backend
 echo $GITHUB_JSON_VARS | jq 'to_entries[] | "\(.key)=\(.value)"' | sed 's/"//g' > ../envs/.env-$GITHUB_REPOSITORY_NAME
