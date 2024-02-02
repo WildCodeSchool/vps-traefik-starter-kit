@@ -6,9 +6,7 @@ GITHUB_JSON_VARS=${4}
 DB_NAME=`echo "$GITHUB_REPOSITORY_NAME" | sed 's/\-/\_/g'`
 
 #Create projects directory if not exists
-if [ ! -d "../../projects/" ]; then
-  mkdir "../../projects"
-fi
+mkdir -p "../../projects/envs"
 
 #Clone the repository if not exists
 if [ ! -d "../../projects/$GITHUB_REPOSITORY_NAME" ]; then
@@ -22,10 +20,6 @@ cd "../../projects/$GITHUB_REPOSITORY_NAME"
 git checkout main
 git pull origin main --rebase
 
-#print Github action vars to .env file project
-if [ ! -d "../envs/" ]; then
-  mkdir "../envs"
-fi
 #parse and write ENV vars
 echo $GITHUB_JSON_VARS | jq 'to_entries[] | "\(.key)=\(.value)"' | sed 's/"//g' > ../envs/.env-$GITHUB_REPOSITORY_NAME
 
