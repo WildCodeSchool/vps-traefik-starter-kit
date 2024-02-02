@@ -4,9 +4,7 @@ docker container stop $(docker container ls -q --filter name=mailhog)
 fi
 
 #Create projects directory if not exists
-if [ ! -d "../../projects/" ]; then
-  mkdir "../../projects"
-fi
+mkdir -p "../../projects/envs"
 
 #Clone the repository if not exists
 if [ ! -d "../../projects/${1}" ]; then
@@ -18,13 +16,10 @@ fi
 #Update main branch
 cd "../../projects/${1}"
 git checkout main
-git pull origin main
+git pull origin main --rebase
 
 #print Github action vars to project .env file
 VARS=${3}
-if [ ! -d "../envs/" ]; then
-  mkdir "../envs"
-fi
 echo $VARS | jq 'to_entries[] | "\(.key)=\(.value)"' | sed 's/"//g' > ../envs/.env-${1}
 
 #Build and start Docker container and their services
