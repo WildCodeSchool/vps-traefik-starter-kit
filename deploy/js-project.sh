@@ -11,9 +11,7 @@ GITHUB_JSON_VARS=${4}
 DB_NAME=`echo "$GITHUB_REPOSITORY_NAME" | sed 's/\-/\_/g'`
 
 #Create projects directory if not exists
-if [ ! -d "../../projects/" ]; then
-  mkdir "../../projects"
-fi
+mkdir -p "../../projects/envs"
 
 #Clone the repository if not exists
 if [ ! -d "../../projects/$GITHUB_REPOSITORY_NAME" ]; then
@@ -27,15 +25,10 @@ cd "../../projects/$GITHUB_REPOSITORY_NAME"
 git checkout main
 git pull origin main
 
-#print Github action vars to .env file project
-if [ ! -d "../envs/" ]; then
-  mkdir "../envs"
-fi
 #parse and write ENV vars for both front and backend
 echo $GITHUB_JSON_VARS | jq 'to_entries[] | "\(.key)=\(.value)"' | sed 's/"//g' > ../envs/.env-$GITHUB_REPOSITORY_NAME
-VITE_BACKEND_URL="https://$PROJECT_NAME-backend.$HOST"
-echo VITE_BACKEND_URL=$VITE_BACKEND_URL > ./frontend/.env
-echo $GITHUB_JSON_VARS | jq 'to_entries[] | "\(.key)=\(.value)"' | sed 's/"//g' >> ./frontend/.env
+echo "VITE_BACKEND_URL=https://$PROJECT_NAME.$HOST" > ./frontend/.env
+cat ../envs/.env-$GITHUB_REPOSITORY_NAME >> ./frontend/.env
 
 #Build and start Docker container with docker compose
 GITHUB_REPOSITORY_NAME=$GITHUB_REPOSITORY_NAME \
