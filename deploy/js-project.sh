@@ -1,3 +1,8 @@
+# To ADD Stop all web containers for better performance
+if [ "$(docker container ls -q --filter name=web)" ]; then
+docker container stop $(docker container ls -q --filter name=web)
+fi
+
 #Import Traefik variables
 set -o allexport
 source ../data/.env
@@ -36,3 +41,11 @@ PROJECT_NAME=$PROJECT_NAME \
 DB_NAME=$DB_NAME \
 docker compose -f docker-compose.prod.yml \
 --env-file ../../traefik/data/.env up -d --build --remove-orphans --force-recreate
+
+# To ADD Restart mailhog containers
+if [ "$(docker container ls -qa --filter name=web)" ]; then
+docker container restart $(docker container ls -qa --filter name=web)
+fi
+
+docker system prune -a -f
+
