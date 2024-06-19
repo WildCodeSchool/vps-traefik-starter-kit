@@ -27,8 +27,8 @@ git pull origin main --rebase
 
 #parse and write ENV vars for both front and backend
 echo $GITHUB_JSON_VARS | jq 'to_entries[] | "\(.key)=\(.value)"' | sed 's/"//g' > ../envs/.env-$GITHUB_REPOSITORY_NAME
-echo "VITE_BACKEND_URL=https://$PROJECT_NAME.$HOST" > ./frontend/.env
-cat ../envs/.env-$GITHUB_REPOSITORY_NAME >> ./frontend/.env
+echo "VITE_API_URL=https://$PROJECT_NAME.$HOST" > ./client/.env
+cat ../envs/.env-$GITHUB_REPOSITORY_NAME >> ./client/.env
 
 #Build and start Docker container with docker compose
 GITHUB_REPOSITORY_NAME=$GITHUB_REPOSITORY_NAME \
