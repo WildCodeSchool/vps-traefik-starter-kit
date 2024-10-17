@@ -20,10 +20,10 @@ if [ ! -d "../../projects/$GITHUB_REPOSITORY_NAME" ]; then
   cd -
 fi
 
-#Update main branch
+#Update staging branch
 cd "../../projects/$GITHUB_REPOSITORY_NAME"
-git checkout main
-git pull origin main --rebase
+git checkout staging
+git pull origin staging --rebase
 
 #parse and write ENV vars for both front and backend
 echo $GITHUB_JSON_VARS | jq 'to_entries[] | "\(.key)=\(.value)"' | sed 's/"//g' > ../envs/.env-$GITHUB_REPOSITORY_NAME
