@@ -22,12 +22,12 @@ mkdir -p "../../projects/envs"
 if [ ! -d "../../projects/$GITHUB_REPOSITORY_NAME" ]; then
   cd "../../projects/"
   git clone https://github.com/$GITHUB_ACCOUNT_NAME/$GITHUB_REPOSITORY_NAME
+  git switch staging
   cd -
 fi
 
-#Update staging branch
+#Pull staging branch
 cd "../../projects/$GITHUB_REPOSITORY_NAME"
-git checkout staging
 git pull origin staging --rebase
 
 #parse and write ENV vars for both front and backend
